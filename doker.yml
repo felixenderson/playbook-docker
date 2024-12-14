@@ -1,0 +1,40 @@
+- name: Installation de Docker
+  hosts: testeur
+  become: yes
+
+  tasks:
+    - name: Installer les dépendances
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+
+    - name: Ajouter la clé GPG
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Ajouter le dépôt Docker
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Installer Docker
+      apt:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: Démarrer et activer le service Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
