@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCE="/home/tchelibou/Documents/document_classe"
+DESTINATION="vagrant@192.168.56.115:/home/vagrant/Documents/document_classe"
+
+
+# Exécuter la sauvegarde différentielle
+rsync -avz --delete --link-dest=$DESTINATION $SOURCE/ $DESTINATION/
